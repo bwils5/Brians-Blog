@@ -1,4 +1,4 @@
-// Load environment variables from .env file
+// Load environment variables from .env file if running locally
 require('dotenv').config();
 
 const express = require('express');
@@ -7,17 +7,11 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 
-// Import blog routes
-const blogRoutes = require('./routes/blogRoutes');
-
-// Middleware to parse request bodies
-app.use(bodyParser.json());
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'views')));
+// MongoDB connection URI (from environment variable)
+const mongoURI = process.env.MONGODB_URI;
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -28,18 +22,23 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.error('Error connecting to MongoDB:', error);
 });
 
-// Use blog routes
+// Middleware to parse JSON data
+app.use(bodyParser.json());
+
+// Serve static files from the views directory
+app.use(express.static(path.join(__dirname, 'views')));
+
+// Import blog routes
+const blogRoutes = require('./routes/blogRoutes');
 app.use('/api', blogRoutes);
 
-// Basic route
+// Basic route to serve the main HTML page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// Use the port from the environment file
+// Set up the port for Render's environment or fallback to 3000 locally
 const PORT = process.env.PORT || 3000;
-
-// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
