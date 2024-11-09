@@ -55,3 +55,9 @@ document.getElementById('post-form').addEventListener('submit', createPost);
 
 // Fetch and display blog posts on page load
 fetchPosts();
+
+document.getElementById('post-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    alert('Your post has been published!');
+    // You could reset the form here if desired
+});
