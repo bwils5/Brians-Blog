@@ -7,13 +7,18 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 
+// Log MongoDB URI to confirm it's being read correctly
+console.log('MongoDB URI:', process.env.MONGODB_URI);
+
 // MongoDB connection URI (from environment variable)
 const mongoURI = process.env.MONGODB_URI;
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    retryWrites: true,
+    ssl: true
 })
 .then(() => {
     console.log('Connected to MongoDB');
