@@ -7,11 +7,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 
-// Log MongoDB URI to confirm it's being read correctly
-console.log('MongoDB URI:', process.env.MONGODB_URI);
-
-// MongoDB connection URI (from environment variable)
-const mongoURI = process.env.MONGODB_URI;
+// Temporary hardcoded MongoDB URI
+const mongoURI = 'mongodb+srv://bpu333:Landmark123123%21@cluster0.rflub.mongodb.net/BriansBlog?retryWrites=true&w=majority';
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, {
